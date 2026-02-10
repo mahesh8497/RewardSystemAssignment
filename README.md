@@ -26,42 +26,7 @@ A Spring Boot application that calculates and manages customer reward points bas
 - **Spring Boot Version**: 4.0.2
 - **Build Tool**: Maven
 
-### Key Dependencies
-
-| Dependency | Purpose |
-|-----------|---------|
-| `spring-boot-starter-data-jpa` | JPA for database operations and ORM |
-| `spring-boot-starter-webmvc` | Web framework for REST APIs |
-| `mysql-connector-j` | MySQL database driver |
-| `spring-boot-starter-data-jpa-test` | Testing utilities for JPA |
-| `spring-boot-starter-webmvc-test` | Testing utilities for Web MVC |
-
-## Project Structure
-
-```
-rewardSystem/
-├── src/
-│   ├── main/
-│   │   ├── java/com/rewardSystem/
-│   │   │   ├── RewardSystemApplication.java          # Main Spring Boot Application
-│   │   │   ├── controller/
-│   │   │   │   └── RewardsController.java           # REST API endpoints
-│   │   │   ├── entity/
-│   │   │   │   ├── Customer.java                    # Customer entity
-│   │   │   │   ├── Transactions.java                # Transactions entity
-│   │   │   │   └── RewardResponse.java              # API response model
-│   │   │   ├── repository/
-│   │   │   │   └── TransactionsRepository.java      # Database access layer
-│   │   │   └── service/
-│   │   │       ├── RewardService.java               # Service interface
-│   │   │       └── RewardServiceImpl.java            # Service implementation
-│   │   └── resources/
-│   │       └── application.properties               # Application configuration
-│   └── test/
-│       └── java/com/rewardSystem/
-│           └── RewardSystemApplicationTests.java    # Unit tests
-├── pom.xml                                          # Maven configuration
-└── README.md                                        # This file
+                                   # This file
 ```
 
 ## Prerequisites
@@ -97,19 +62,10 @@ CREATE TABLE transactions (
 );
 ```
 
-### Step 3: Update Database Configuration
 
-Edit `src/main/resources/application.properties`:
 
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/rewardsystem
-spring.datasource.username=root
-spring.datasource.password=root
-```
 
-Update the `username` and `password` with your MySQL credentials.
-
-### Step 4: Build the Project
+### Step 3: Build the Project
 
 Run the following Maven command to build the project:
 
@@ -213,7 +169,7 @@ mvn test
 ### Port Already in Use
 - Change the port in `application.properties`:
 ```properties
-server.port=8081
+server.port=8080
 ```
 
 ### Build Failures
@@ -227,24 +183,7 @@ server.port=8081
 - Reward points are aggregated by customer and month
 - The API follows REST conventions with proper HTTP methods
 
-## Future Enhancements
 
-- Add customer endpoints (CRUD operations)
-- Implement pagination for large datasets
-- Add filtering by date range
-- Implement customer dashboard UI
-- Add reward redemption features
-- Implement audit logging
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Support
-
-For issues or questions, please create an issue in the repository or contact the development team.
-
----
 
 **Last Updated**: February 2026
 **Java Version**: 21
