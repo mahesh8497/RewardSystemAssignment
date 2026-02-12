@@ -153,11 +153,61 @@ The reward points are calculated based on the transaction amount:
 
 ## Testing
 
-Run the unit tests using Maven:
+The application includes comprehensive unit, integration, and entity tests covering all layers of the application.
 
+### Test Suite Overview
+
+**Total Test Cases:** 120+
+
+The test suite includes:
+- **Service Layer Tests (15 tests)** - Reward calculation logic, data aggregation, and business rules
+- **Controller Layer Tests (20 tests)** - HTTP endpoint validation, response format, and error handling
+- **Entity Tests (25 tests)** - Object constructors, getters/setters, and data type handling
+- **Repository Tests (14 tests)** - CRUD operations, database persistence, and query operations
+- **Integration Tests (10 tests)** - End-to-end workflows and multi-layer interaction
+- **Application Tests (7 tests)** - Spring Boot configuration and bean management
+
+### Running Tests
+
+**Run all tests:**
 ```bash
-mvn test
+./mvnw clean test
 ```
+
+**Run specific test class:**
+```bash
+./mvnw test -Dtest=RewardServiceImplTest
+```
+
+**Run specific test method:**
+```bash
+./mvnw test -Dtest=RewardServiceImplTest#testMultipleCustomersSeparateRewards
+```
+
+**Generate test coverage report:**
+```bash
+./mvnw clean test jacoco:report
+```
+
+### Test Coverage Details
+
+For detailed information about all test cases, see [TEST_DOCUMENTATION.md](./TEST_DOCUMENTATION.md)
+
+### Test Framework & Tools
+- **JUnit 5** - Testing framework
+- **Mockito** - Mocking framework
+- **Spring Test** - Spring Boot integration testing
+- **H2 Database** - In-memory database for tests
+
+### Key Testing Patterns
+
+1. **AAA Pattern (Arrange-Act-Assert)** - Clear test structure
+2. **Mocking** - Isolated unit tests
+3. **Boundary Testing** - Edge case validation
+4. **Integration Testing** - Full workflow validation
+5. **Data-Driven Testing** - Multiple scenarios covered
+
+---
 
 ## Troubleshooting
 
@@ -188,4 +238,3 @@ server.port=8080
 **Last Updated**: February 2026
 **Java Version**: 21
 **Spring Boot Version**: 4.0.2
-
