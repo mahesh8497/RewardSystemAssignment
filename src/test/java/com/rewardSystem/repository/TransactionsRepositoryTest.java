@@ -1,6 +1,6 @@
 package com.rewardSystem.repository;
 
-import com.rewardSystem.entity.Transactions;
+import com.rewardSystem.entity.CustomerTranscation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,10 +30,10 @@ class TransactionsRepositoryTest {
     @DisplayName("Should save transaction to database")
     void testSaveTransaction() {
         // Arrange
-        Transactions transaction = new Transactions(1, 100.0, LocalDate.now());
+        CustomerTranscation transaction = new CustomerTranscation(1, 100.0, LocalDate.now());
 
         // Act
-        Transactions saved = transactionsRepository.save(transaction);
+        CustomerTranscation saved = transactionsRepository.save(transaction);
 
         // Assert
         assertNotNull(saved.getId());
@@ -45,11 +45,11 @@ class TransactionsRepositoryTest {
     @DisplayName("Should retrieve all transactions")
     void testFindAll() {
         // Arrange
-        transactionsRepository.save(new Transactions(1, 100.0, LocalDate.now()));
-        transactionsRepository.save(new Transactions(2, 200.0, LocalDate.now()));
+        transactionsRepository.save(new CustomerTranscation(1, 100.0, LocalDate.now()));
+        transactionsRepository.save(new CustomerTranscation(2, 200.0, LocalDate.now()));
 
         // Act
-        List<Transactions> transactions = transactionsRepository.findAll();
+        List<CustomerTranscation> transactions = transactionsRepository.findAll();
 
         // Assert
         assertEquals(2, transactions.size());
@@ -59,7 +59,7 @@ class TransactionsRepositoryTest {
     @DisplayName("Should find transaction by ID")
     void testFindById() {
         // Arrange
-        Transactions saved = transactionsRepository.save(new Transactions(1, 100.0, LocalDate.now()));
+        CustomerTranscation saved = transactionsRepository.save(new CustomerTranscation(1, 100.0, LocalDate.now()));
 
         // Act
         var found = transactionsRepository.findById(saved.getId());
@@ -73,11 +73,11 @@ class TransactionsRepositoryTest {
     @DisplayName("Should update transaction")
     void testUpdateTransaction() {
         // Arrange
-        Transactions saved = transactionsRepository.save(new Transactions(1, 100.0, LocalDate.now()));
+        CustomerTranscation saved = transactionsRepository.save(new CustomerTranscation(1, 100.0, LocalDate.now()));
         saved.setAmount(150.0);
 
         // Act
-        Transactions updated = transactionsRepository.save(saved);
+        CustomerTranscation updated = transactionsRepository.save(saved);
 
         // Assert
         assertEquals(150.0, updated.getAmount());
@@ -87,7 +87,7 @@ class TransactionsRepositoryTest {
     @DisplayName("Should delete transaction")
     void testDeleteTransaction() {
         // Arrange
-        Transactions saved = transactionsRepository.save(new Transactions(1, 100.0, LocalDate.now()));
+        CustomerTranscation saved = transactionsRepository.save(new CustomerTranscation(1, 100.0, LocalDate.now()));
         Long id = saved.getId();
 
         // Act
@@ -101,13 +101,13 @@ class TransactionsRepositoryTest {
     @DisplayName("Should save multiple transactions")
     void testSaveMultipleTransactions() {
         // Arrange
-        Transactions trans1 = new Transactions(1, 100.0, LocalDate.now());
-        Transactions trans2 = new Transactions(2, 200.0, LocalDate.now());
-        Transactions trans3 = new Transactions(3, 300.0, LocalDate.now());
+        CustomerTranscation trans1 = new CustomerTranscation(1, 100.0, LocalDate.now());
+        CustomerTranscation trans2 = new CustomerTranscation(2, 200.0, LocalDate.now());
+        CustomerTranscation trans3 = new CustomerTranscation(3, 300.0, LocalDate.now());
 
         // Act
         transactionsRepository.saveAll(List.of(trans1, trans2, trans3));
-        List<Transactions> allTransactions = transactionsRepository.findAll();
+        List<CustomerTranscation> allTransactions = transactionsRepository.findAll();
 
         // Assert
         assertEquals(3, allTransactions.size());
@@ -117,8 +117,8 @@ class TransactionsRepositoryTest {
     @DisplayName("Should count transactions")
     void testCountTransactions() {
         // Arrange
-        transactionsRepository.save(new Transactions(1, 100.0, LocalDate.now()));
-        transactionsRepository.save(new Transactions(2, 200.0, LocalDate.now()));
+        transactionsRepository.save(new CustomerTranscation(1, 100.0, LocalDate.now()));
+        transactionsRepository.save(new CustomerTranscation(2, 200.0, LocalDate.now()));
 
         // Act
         long count = transactionsRepository.count();
@@ -131,11 +131,11 @@ class TransactionsRepositoryTest {
     @DisplayName("Should handle transactions with same customer ID")
     void testMultipleTransactionsSameCustomer() {
         // Arrange
-        transactionsRepository.save(new Transactions(1, 100.0, LocalDate.now()));
-        transactionsRepository.save(new Transactions(1, 150.0, LocalDate.now()));
+        transactionsRepository.save(new CustomerTranscation(1, 100.0, LocalDate.now()));
+        transactionsRepository.save(new CustomerTranscation(1, 150.0, LocalDate.now()));
 
         // Act
-        List<Transactions> allTransactions = transactionsRepository.findAll();
+        List<CustomerTranscation> allTransactions = transactionsRepository.findAll();
 
         // Assert
         assertEquals(2, allTransactions.size());
@@ -150,9 +150,9 @@ class TransactionsRepositoryTest {
 
         // Act
         for (double amount : amounts) {
-            transactionsRepository.save(new Transactions(1, amount, LocalDate.now()));
+            transactionsRepository.save(new CustomerTranscation(1, amount, LocalDate.now()));
         }
-        List<Transactions> transactions = transactionsRepository.findAll();
+        List<CustomerTranscation> transactions = transactionsRepository.findAll();
 
         // Assert
         assertEquals(amounts.length, transactions.size());
@@ -167,21 +167,21 @@ class TransactionsRepositoryTest {
         LocalDate date3 = LocalDate.of(2026, 3, 5);
 
         // Act
-        transactionsRepository.save(new Transactions(1, 100.0, date1));
-        transactionsRepository.save(new Transactions(1, 100.0, date2));
-        transactionsRepository.save(new Transactions(1, 100.0, date3));
-        List<Transactions> transactions = transactionsRepository.findAll();
+        transactionsRepository.save(new CustomerTranscation(1, 100.0, date1));
+        transactionsRepository.save(new CustomerTranscation(1, 100.0, date2));
+        transactionsRepository.save(new CustomerTranscation(1, 100.0, date3));
+        List<CustomerTranscation> transactions = transactionsRepository.findAll();
 
         // Assert
         assertEquals(3, transactions.size());
-        assertTrue(transactions.stream().map(Transactions::getDate).distinct().count() >= 1);
+        assertTrue(transactions.stream().map(CustomerTranscation::getDate).distinct().count() >= 1);
     }
 
     @Test
     @DisplayName("Should return empty list when no transactions exist")
     void testEmptyTransactionsList() {
         // Act
-        List<Transactions> transactions = transactionsRepository.findAll();
+        List<CustomerTranscation> transactions = transactionsRepository.findAll();
 
         // Assert
         assertTrue(transactions.isEmpty());
@@ -191,12 +191,12 @@ class TransactionsRepositoryTest {
     @DisplayName("Should delete all transactions")
     void testDeleteAll() {
         // Arrange
-        transactionsRepository.save(new Transactions(1, 100.0, LocalDate.now()));
-        transactionsRepository.save(new Transactions(2, 200.0, LocalDate.now()));
+        transactionsRepository.save(new CustomerTranscation(1, 100.0, LocalDate.now()));
+        transactionsRepository.save(new CustomerTranscation(2, 200.0, LocalDate.now()));
 
         // Act
         transactionsRepository.deleteAll();
-        List<Transactions> transactions = transactionsRepository.findAll();
+        List<CustomerTranscation> transactions = transactionsRepository.findAll();
 
         // Assert
         assertTrue(transactions.isEmpty());
@@ -206,10 +206,10 @@ class TransactionsRepositoryTest {
     @DisplayName("Should persist large transaction amount")
     void testLargeTransactionAmount() {
         // Arrange
-        Transactions transaction = new Transactions(1, 999999.99, LocalDate.now());
+        CustomerTranscation transaction = new CustomerTranscation(1, 999999.99, LocalDate.now());
 
         // Act
-        Transactions saved = transactionsRepository.save(transaction);
+        CustomerTranscation saved = transactionsRepository.save(transaction);
         var retrieved = transactionsRepository.findById(saved.getId());
 
         // Assert

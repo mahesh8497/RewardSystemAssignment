@@ -1,7 +1,7 @@
 package com.rewardSystem.service;
 
-import com.rewardSystem.entity.RewardResponse;
-import com.rewardSystem.entity.Transactions;
+import com.rewardSystem.entity.RewardPoints;
+import com.rewardSystem.entity.CustomerTranscation;
 import com.rewardSystem.repository.TransactionsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +29,7 @@ class RewardServiceImplTest {
     @InjectMocks
     private RewardServiceImpl rewardService;
 
-    private List<Transactions> testTransactions;
+    private List<CustomerTranscation> testTransactions;
     private LocalDate today;
 
     @BeforeEach
@@ -45,7 +45,7 @@ class RewardServiceImplTest {
         when(transactionsRepository.findAll()).thenReturn(new ArrayList<>());
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertNotNull(rewards);
@@ -56,15 +56,15 @@ class RewardServiceImplTest {
     @DisplayName("Should calculate rewards for single customer with single transaction")
     void testFindAllRewardsSingleCustomerSingleTransaction() {
         // Arrange
-        testTransactions.add(new Transactions(1, 120.0, today));
+        testTransactions.add(new CustomerTranscation(1, 120.0, today));
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertEquals(1, rewards.size());
-        RewardResponse response = rewards.get(0);
+        RewardPoints response = rewards.get(0);
         assertEquals(1, response.getCustomerId());
         assertEquals(90, response.getTotalRewardPoints()); // (100-50)*1 + (120-100)*2 = 50 + 40 = 90
         assertNotNull(response.getMonthlyRewards());
@@ -74,11 +74,11 @@ class RewardServiceImplTest {
     @DisplayName("Should calculate rewards correctly for amount > 100")
     void testRewardCalculationAmountGreaterThan100() {
         // Arrange
-        testTransactions.add(new Transactions(1, 150.0, today));
+        testTransactions.add(new CustomerTranscation(1, 150.0, today));
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertEquals(1, rewards.size());
@@ -89,11 +89,11 @@ class RewardServiceImplTest {
     @DisplayName("Should calculate rewards correctly for amount between 50 and 100")
     void testRewardCalculationAmountBetween50And100() {
         // Arrange
-        testTransactions.add(new Transactions(1, 75.0, today));
+        testTransactions.add(new CustomerTranscation(1, 75.0, today));
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertEquals(1, rewards.size());
@@ -104,11 +104,11 @@ class RewardServiceImplTest {
     @DisplayName("Should return 0 points for amount <= 50")
     void testRewardCalculationAmountLessThanOrEqual50() {
         // Arrange
-        testTransactions.add(new Transactions(1, 50.0, today));
+        testTransactions.add(new CustomerTranscation(1, 50.0, today));
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertEquals(1, rewards.size());
@@ -119,17 +119,17 @@ class RewardServiceImplTest {
     @DisplayName("Should aggregate multiple transactions for same customer")
     void testMultipleTransactionsSameCustomer() {
         // Arrange
-        testTransactions.add(new Transactions(1, 120.0, today));
-        testTransactions.add(new Transactions(1, 80.0, today));
-        testTransactions.add(new Transactions(1, 60.0, today));
+        testTransactions.add(new CustomerTranscation(1, 120.0, today));
+        testTransactions.add(new CustomerTranscation(1, 80.0, today));
+        testTransactions.add(new CustomerTranscation(1, 60.0, today));
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertEquals(1, rewards.size());
-        RewardResponse response = rewards.get(0);
+        RewardPoints response = rewards.get(0);
         assertEquals(1, response.getCustomerId());
         int expectedPoints = 90 + 30 + 10; // 90 + 30 + 10 = 130
         assertEquals(expectedPoints, response.getTotalRewardPoints());
@@ -139,19 +139,19 @@ class RewardServiceImplTest {
     @DisplayName("Should handle multiple customers separately")
     void testMultipleCustomersSeparateRewards() {
         // Arrange
-        testTransactions.add(new Transactions(1, 120.0, today));
-        testTransactions.add(new Transactions(2, 75.0, today));
-        testTransactions.add(new Transactions(3, 200.0, today));
+        testTransactions.add(new CustomerTranscation(1, 120.0, today));
+        testTransactions.add(new CustomerTranscation(2, 75.0, today));
+        testTransactions.add(new CustomerTranscation(3, 200.0, today));
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertEquals(3, rewards.size());
 
         // Verify customer 1
-        RewardResponse customer1 = rewards.stream()
+        RewardPoints customer1 = rewards.stream()
                 .filter(r -> r.getCustomerId() == 1)
                 .findFirst()
                 .orElse(null);
@@ -159,7 +159,7 @@ class RewardServiceImplTest {
         assertEquals(90, customer1.getTotalRewardPoints());
 
         // Verify customer 2
-        RewardResponse customer2 = rewards.stream()
+        RewardPoints customer2 = rewards.stream()
                 .filter(r -> r.getCustomerId() == 2)
                 .findFirst()
                 .orElse(null);
@@ -167,7 +167,7 @@ class RewardServiceImplTest {
         assertEquals(25, customer2.getTotalRewardPoints());
 
         // Verify customer 3
-        RewardResponse customer3 = rewards.stream()
+        RewardPoints customer3 = rewards.stream()
                 .filter(r -> r.getCustomerId() == 3)
                 .findFirst()
                 .orElse(null);
@@ -182,16 +182,16 @@ class RewardServiceImplTest {
         LocalDate thisMonth = today;
         LocalDate lastMonth = today.minusMonths(1);
 
-        testTransactions.add(new Transactions(1, 120.0, thisMonth));
-        testTransactions.add(new Transactions(1, 75.0, lastMonth));
+        testTransactions.add(new CustomerTranscation(1, 120.0, thisMonth));
+        testTransactions.add(new CustomerTranscation(1, 75.0, lastMonth));
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertEquals(1, rewards.size());
-        RewardResponse response = rewards.get(0);
+        RewardPoints response = rewards.get(0);
         Map<String, Integer> monthlyRewards = response.getMonthlyRewards();
 
         assertNotNull(monthlyRewards);
@@ -209,18 +209,18 @@ class RewardServiceImplTest {
         LocalDate withinRange3 = today.minusMonths(2); // 2 months ago
         LocalDate outOfRange = today.minusMonths(3).minusDays(1); // More than 3 months ago
 
-        testTransactions.add(new Transactions(1, 120.0, withinRange));
-        testTransactions.add(new Transactions(1, 75.0, withinRange2));
-        testTransactions.add(new Transactions(1, 60.0, withinRange3));
-        testTransactions.add(new Transactions(1, 100.0, outOfRange)); // This should be excluded
+        testTransactions.add(new CustomerTranscation(1, 120.0, withinRange));
+        testTransactions.add(new CustomerTranscation(1, 75.0, withinRange2));
+        testTransactions.add(new CustomerTranscation(1, 60.0, withinRange3));
+        testTransactions.add(new CustomerTranscation(1, 100.0, outOfRange)); // This should be excluded
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertEquals(1, rewards.size());
-        RewardResponse response = rewards.get(0);
+        RewardPoints response = rewards.get(0);
         Map<String, Integer> monthlyRewards = response.getMonthlyRewards();
 
         // Total should be 90 + 25 + 10 = 125 (excluding the old transaction)
@@ -232,11 +232,11 @@ class RewardServiceImplTest {
     @DisplayName("Should handle decimal amounts correctly")
     void testDecimalAmountHandling() {
         // Arrange
-        testTransactions.add(new Transactions(1, 125.75, today));
+        testTransactions.add(new CustomerTranscation(1, 125.75, today));
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertEquals(1, rewards.size());
@@ -248,11 +248,11 @@ class RewardServiceImplTest {
     @DisplayName("Should handle large amounts correctly")
     void testLargeAmountHandling() {
         // Arrange
-        testTransactions.add(new Transactions(1, 5000.0, today));
+        testTransactions.add(new CustomerTranscation(1, 5000.0, today));
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertEquals(1, rewards.size());
@@ -267,17 +267,17 @@ class RewardServiceImplTest {
         LocalDate january = LocalDate.of(2026, 1, 15);
         LocalDate february = LocalDate.of(2026, 2, 10);
 
-        testTransactions.add(new Transactions(1, 100.0, january));
-        testTransactions.add(new Transactions(1, 100.0, january));
-        testTransactions.add(new Transactions(1, 100.0, february));
+        testTransactions.add(new CustomerTranscation(1, 100.0, january));
+        testTransactions.add(new CustomerTranscation(1, 100.0, january));
+        testTransactions.add(new CustomerTranscation(1, 100.0, february));
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertEquals(1, rewards.size());
-        RewardResponse response = rewards.get(0);
+        RewardPoints response = rewards.get(0);
         assertEquals(1, response.getCustomerId());
         // Each 100 = 50 points, so 3 transactions = 150 points total
         assertEquals(150, response.getTotalRewardPoints());
@@ -290,16 +290,16 @@ class RewardServiceImplTest {
     @DisplayName("Should return non-null RewardResponse object")
     void testRewardResponseNotNull() {
         // Arrange
-        testTransactions.add(new Transactions(1, 100.0, today));
+        testTransactions.add(new CustomerTranscation(1, 100.0, today));
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertNotNull(rewards);
         assertFalse(rewards.isEmpty());
-        RewardResponse response = rewards.get(0);
+        RewardPoints response = rewards.get(0);
         assertNotNull(response.getCustomerId());
         assertNotNull(response.getMonthlyRewards());
         assertNotNull(response.getTotalRewardPoints());
@@ -309,11 +309,11 @@ class RewardServiceImplTest {
     @DisplayName("Should calculate correctly with boundary amount of 51")
     void testBoundaryAmountOf51() {
         // Arrange
-        testTransactions.add(new Transactions(1, 51.0, today));
+        testTransactions.add(new CustomerTranscation(1, 51.0, today));
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertEquals(1, rewards.size());
@@ -324,11 +324,11 @@ class RewardServiceImplTest {
     @DisplayName("Should calculate correctly with boundary amount of 100")
     void testBoundaryAmountOf100() {
         // Arrange
-        testTransactions.add(new Transactions(1, 100.0, today));
+        testTransactions.add(new CustomerTranscation(1, 100.0, today));
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertEquals(1, rewards.size());
@@ -339,11 +339,11 @@ class RewardServiceImplTest {
     @DisplayName("Should calculate correctly with boundary amount of 101")
     void testBoundaryAmountOf101() {
         // Arrange
-        testTransactions.add(new Transactions(1, 101.0, today));
+        testTransactions.add(new CustomerTranscation(1, 101.0, today));
         when(transactionsRepository.findAll()).thenReturn(testTransactions);
 
         // Act
-        List<RewardResponse> rewards = rewardService.findAllRewards();
+        List<RewardPoints> rewards = rewardService.findAllRewards();
 
         // Assert
         assertEquals(1, rewards.size());

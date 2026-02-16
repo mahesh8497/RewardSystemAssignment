@@ -2,7 +2,7 @@ package com.rewardSystem.entity;
 
 import java.util.Map;
 
-public class RewardResponse {
+public class RewardPoints {
 
     private int customerId;
 
@@ -10,11 +10,11 @@ public class RewardResponse {
 
     private int totalRewardPoints;
 
-    public RewardResponse() {
+    public RewardPoints() {
 
     }
 
-    public RewardResponse(int customerId, Map<String, Integer> monthlyRewards, int totalRewardPoints) {
+    public RewardPoints(int customerId, Map<String, Integer> monthlyRewards, int totalRewardPoints) {
         this.customerId = customerId;
         this.monthlyRewards = monthlyRewards;
         this.totalRewardPoints = totalRewardPoints;

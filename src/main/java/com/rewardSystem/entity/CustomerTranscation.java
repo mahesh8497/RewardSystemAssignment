@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "transactions")
-public class Transactions {
+public class CustomerTranscation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,11 +21,11 @@ public class Transactions {
     @Column(nullable = false)
     private LocalDate date;
 
-    public Transactions() {
+    public CustomerTranscation() {
 
     }
 
-    public Transactions(int customerId, double amount, LocalDate date) {
+    public CustomerTranscation(int customerId, double amount, LocalDate date) {
         super();
         this.customerId = customerId;
         this.amount = amount;

@@ -1,7 +1,7 @@
 package com.rewardSystem.repository;
 
-import com.rewardSystem.entity.Transactions;
+import com.rewardSystem.entity.CustomerTranscation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TransactionsRepository extends JpaRepository<Transactions,Long> {
+public interface TransactionsRepository extends JpaRepository<CustomerTranscation,Long> {
 }

@@ -1,6 +1,6 @@
 package com.rewardSystem.controller;
 
-import com.rewardSystem.entity.RewardResponse;
+import com.rewardSystem.entity.RewardPoints;
 import com.rewardSystem.service.RewardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultMatcher;
+
 import static org.hamcrest.Matchers.*;
 
 
@@ -20,8 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static net.bytebuddy.matcher.ElementMatchers.isArray;
-import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,16 +35,16 @@ class RewardsControllerTest {
     @MockBean
     private RewardService rewardService;
 
-    private List<RewardResponse> mockRewards;
-    private RewardResponse mockReward1;
-    private RewardResponse mockReward2;
+    private List<RewardPoints> mockRewards;
+    private RewardPoints mockReward1;
+    private RewardPoints mockReward2;
 
     @BeforeEach
     void setUp() {
         mockRewards = new ArrayList<>();
 
         // Setup mock reward 1
-        mockReward1 = new RewardResponse();
+        mockReward1 = new RewardPoints();
         mockReward1.setCustomerId(1);
         Map<String, Integer> monthlyRewards1 = new HashMap<>();
         monthlyRewards1.put("JANUARY", 100);
@@ -55,7 +53,7 @@ class RewardsControllerTest {
         mockReward1.setTotalRewardPoints(150);
 
         // Setup mock reward 2
-        mockReward2 = new RewardResponse();
+        mockReward2 = new RewardPoints();
         mockReward2.setCustomerId(2);
         Map<String, Integer> monthlyRewards2 = new HashMap<>();
         monthlyRewards2.put("JANUARY", 75);
@@ -290,9 +288,9 @@ class RewardsControllerTest {
     @DisplayName("Should handle large response with many customers")
     void testGetAllRewardsLargeDataSet() throws Exception {
         // Arrange
-        List<RewardResponse> largeDataSet = new ArrayList<>();
+        List<RewardPoints> largeDataSet = new ArrayList<>();
         for (int i = 1; i <= 100; i++) {
-            RewardResponse reward = new RewardResponse();
+            RewardPoints reward = new RewardPoints();
             reward.setCustomerId(i);
             Map<String, Integer> monthlyRewards = new HashMap<>();
             monthlyRewards.put("JANUARY", i * 10);
@@ -331,7 +329,7 @@ class RewardsControllerTest {
     @DisplayName("Should return zero points correctly in response")
     void testGetAllRewardsWithZeroPoints() throws Exception {
         // Arrange
-        RewardResponse zeroReward = new RewardResponse();
+        RewardPoints zeroReward = new RewardPoints();
         zeroReward.setCustomerId(3);
         zeroReward.setMonthlyRewards(new HashMap<>());
         zeroReward.setTotalRewardPoints(0);
