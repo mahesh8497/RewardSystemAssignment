@@ -3,10 +3,6 @@ package com.rewardSystem.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 
-/**
- * Standard error response DTO for all API error responses.
- * Provides consistent error information across all endpoints.
- */
 public class ErrorResponse {
 
     @JsonProperty("timestamp")

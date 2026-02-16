@@ -10,11 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-/**
- * Global exception handler for centralized exception handling across the application.
- * Handles custom exceptions and provides consistent error responses.
- * Uses @ControllerAdvice for AOP-based exception handling.
- */
+
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 

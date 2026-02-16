@@ -17,10 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Service implementation for reward calculations and retrieval.
- * Handles business logic for computing reward points based on customer transactions.
- */
 @Service
 public class RewardServiceImpl implements RewardService {
 
