@@ -18,10 +18,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-/**
- * Service for handling user authentication and registration.
- * Provides login, registration, and token management functionality.
- */
 @Service
 public class AuthenticationService {
 
@@ -42,13 +38,7 @@ public class AuthenticationService {
     @Value("${jwt.expiration:86400000}")
     private int jwtExpirationMs;
 
-    /**
-     * Authenticates user credentials and returns JWT token.
-     *
-     * @param loginRequest login credentials
-     * @return LoginResponse with JWT token
-     * @throws AuthenticationException if authentication fails
-     */
+
     public LoginResponse login(LoginRequest loginRequest) throws AuthenticationException {
         logger.info("Attempting login for user: {}", loginRequest.getUsername());
 
@@ -77,14 +67,6 @@ public class AuthenticationService {
             throw new DataProcessingException("Invalid username or password");
         }
     }
-
-    /**
-     * Registers a new user.
-     *
-     * @param registerRequest registration details
-     * @return LoginResponse with JWT token
-     * @throws DataProcessingException if registration fails
-     */
     public LoginResponse register(RegisterRequest registerRequest) throws DataProcessingException {
         logger.info("Attempting registration for user: {}", registerRequest.getUsername());
 
@@ -137,23 +119,11 @@ public class AuthenticationService {
         }
     }
 
-    /**
-     * Validates JWT token.
-     *
-     * @param token the JWT token
-     * @return true if token is valid, false otherwise
-     */
     public boolean validateToken(String token) {
         logger.trace("Validating token");
         return jwtTokenProvider.validateToken(token);
     }
 
-    /**
-     * Extracts username from JWT token.
-     *
-     * @param token the JWT token
-     * @return username
-     */
     public String getUsernameFromToken(String token) {
         logger.trace("Extracting username from token");
         return jwtTokenProvider.getUsernameFromToken(token);

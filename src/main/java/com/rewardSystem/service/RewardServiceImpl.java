@@ -25,13 +25,6 @@ public class RewardServiceImpl implements RewardService {
     @Autowired
     private TransactionsRepository transactionsRepository;
 
-    /**
-     * Finds all rewards for customers based on transactions from the last 3 months.
-     *
-     * @return List of RewardPoints for all customers
-     * @throws InternalServerException if database access fails
-     * @throws DataProcessingException if data processing fails
-     */
     @Override
     public List<RewardPoints> findAllRewards() {
         logger.debug("Starting findAllRewards operation");
@@ -75,14 +68,6 @@ public class RewardServiceImpl implements RewardService {
         }
     }
 
-    /**
-     * Builds a reward response object for a specific customer based on their transactions.
-     *
-     * @param customerId the ID of the customer
-     * @param transactions list of transactions for the customer
-     * @return RewardPoints object containing calculated reward data
-     * @throws DataProcessingException if calculation fails
-     */
     private RewardPoints buildRewardResponse(int customerId, List<CustomerTranscation> transactions) {
         logger.debug("Building reward response for customer ID: {}", customerId);
 
@@ -122,16 +107,6 @@ public class RewardServiceImpl implements RewardService {
         }
     }
 
-    /**
-     * Calculates reward points based on transaction amount.
-     * Rules:
-     * - 2 points for every dollar spent over $100
-     * - 1 point for every dollar spent between $50 and $100
-     *
-     * @param amount the transaction amount
-     * @return calculated reward points
-     * @throws IllegalArgumentException if amount is invalid
-     */
     private int calculatePoints(double amount) {
         logger.trace("Calculating points for amount: {}", amount);
 

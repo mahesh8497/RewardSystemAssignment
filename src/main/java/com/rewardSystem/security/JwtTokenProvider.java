@@ -14,10 +14,6 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-/**
- * Utility class for JWT (JSON Web Token) generation, parsing, and validation.
- * Provides methods for token creation and user claim extraction.
- */
 @Component
 public class JwtTokenProvider {
 
@@ -29,12 +25,6 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration:86400000}")
     private int jwtExpirationMs;
 
-    /**
-     * Generates a JWT token from authentication.
-     *
-     * @param authentication the authentication object
-     * @return JWT token string
-     */
     public String generateToken(Authentication authentication) {
         logger.debug("Generating JWT token for user: {}", authentication.getName());
 
@@ -51,12 +41,6 @@ public class JwtTokenProvider {
         return token;
     }
 
-    /**
-     * Generates a JWT token from username.
-     *
-     * @param username the username
-     * @return JWT token string
-     */
     public String generateTokenFromUsername(String username) {
         logger.debug("Generating JWT token for username: {}", username);
 
@@ -73,51 +57,23 @@ public class JwtTokenProvider {
         return token;
     }
 
-    /**
-     * Extracts username from JWT token.
-     *
-     * @param token the JWT token
-     * @return username
-     */
     public String getUsernameFromToken(String token) {
         logger.trace("Extracting username from JWT token");
         Claims claims = getClaimsFromToken(token);
         return claims.getSubject();
     }
 
-    /**
-     * Extracts claims from JWT token.
-     *
-     * @param token the JWT token
-     * @return Claims object
-     */
     private Claims getClaimsFromToken(String token) {
         SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
 
-//        return Jwts.parserBuilder()
-//                .setSigningKey(key)
-//                .build()
-//                .parseClaimsJws(token)
-//                .getBody();
         return Jwts.parser().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    /**
-     * Validates JWT token.
-     *
-     * @param token the JWT token
-     * @return true if token is valid, false otherwise
-     */
     public boolean validateToken(String token) {
         try {
             logger.trace("Validating JWT token");
             SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
-//            Jwts.parserBuilder()
-//                    .setSigningKey(key)
-//                    .build()
-//                    .parseClaimsJws(token);
-//            logger.debug("JWT token is valid");
-//            return true;
+
             Jwts.parser().setSigningKey(key).build().parseClaimsJws(token);
             logger.debug("JWT token is valid");
             return true;
@@ -135,12 +91,6 @@ public class JwtTokenProvider {
         return false;
     }
 
-    /**
-     * Checks if JWT token is expired.
-     *
-     * @param token the JWT token
-     * @return true if expired, false otherwise
-     */
     public boolean isTokenExpired(String token) {
         try {
             Claims claims = getClaimsFromToken(token);

@@ -14,11 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * REST Controller for managing rewards-related endpoints.
- * Provides API endpoints to retrieve customer reward information.
- * All endpoints require authentication and appropriate role authorization.
- */
+
 @RestController
 @RequestMapping("v1/api")
 public class RewardsController {
@@ -28,12 +24,6 @@ public class RewardsController {
     @Autowired
     private RewardService rewardService;
 
-    /**
-     * Retrieves all rewards for all customers.
-     * Only accessible by ADMIN and MANAGER roles.
-     *
-     * @return List of RewardPoints containing customer reward data
-     */
     @GetMapping("/rewards")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> getAllRewards() {

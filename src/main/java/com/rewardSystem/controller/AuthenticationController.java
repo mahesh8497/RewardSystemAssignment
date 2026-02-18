@@ -12,10 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * REST Controller for authentication and authorization endpoints.
- * Provides login, registration, and token validation functionality.
- */
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
@@ -25,13 +21,6 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
 
-    /**
-     * User login endpoint.
-     * Authenticates user credentials and returns JWT token.
-     *
-     * @param loginRequest login credentials
-     * @return LoginResponse with JWT token
-     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         logger.info("Login request received for user: {}", loginRequest.getUsername());
@@ -63,13 +52,6 @@ public class AuthenticationController {
         }
     }
 
-    /**
-     * User registration endpoint.
-     * Creates a new user account and returns JWT token.
-     *
-     * @param registerRequest registration details
-     * @return LoginResponse with JWT token
-     */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
         logger.info("Registration request received for user: {}", registerRequest.getUsername());
@@ -87,13 +69,6 @@ public class AuthenticationController {
         }
     }
 
-    /**
-     * Token validation endpoint.
-     * Validates JWT token and returns validation result.
-     *
-     * @param token the JWT token to validate
-     * @return validation result
-     */
     @GetMapping("/validate")
     public ResponseEntity<?> validateToken(@RequestParam String token) {
         logger.trace("Token validation request received");
@@ -123,9 +98,6 @@ public class AuthenticationController {
         }
     }
 
-    /**
-     * Inner class for token validation response.
-     */
     public static class ValidationResponse {
         public boolean valid;
         public String message;

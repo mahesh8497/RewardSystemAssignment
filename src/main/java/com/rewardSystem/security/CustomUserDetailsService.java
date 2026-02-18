@@ -15,10 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 
-/**
- * Custom UserDetailsService implementation for loading user details from database.
- * Provides Spring Security with user information for authentication and authorization.
- */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -27,13 +23,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    /**
-     * Loads user by username and returns UserDetails.
-     *
-     * @param username the username
-     * @return UserDetails object
-     * @throws UsernameNotFoundException if user not found
-     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         logger.debug("Loading user details for username: {}", username);

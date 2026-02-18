@@ -16,10 +16,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    /**
-     * Handles ResourceNotFoundException
-     * Returns HTTP 404 Not Found
-     */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
             ResourceNotFoundException ex,
@@ -37,10 +33,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    /**
-     * Handles DataProcessingException
-     * Returns HTTP 400 Bad Request
-     */
     @ExceptionHandler(DataProcessingException.class)
     public ResponseEntity<ErrorResponse> handleDataProcessingException(
             DataProcessingException ex,
@@ -58,10 +50,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * Handles InternalServerException
-     * Returns HTTP 500 Internal Server Error
-     */
     @ExceptionHandler(InternalServerException.class)
     public ResponseEntity<ErrorResponse> handleInternalServerException(
             InternalServerException ex,
@@ -79,10 +67,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    /**
-     * Handles IllegalArgumentException
-     * Returns HTTP 400 Bad Request
-     */
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(
             IllegalArgumentException ex,
@@ -100,10 +84,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * Handles NullPointerException
-     * Returns HTTP 500 Internal Server Error
-     */
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<ErrorResponse> handleNullPointerException(
             NullPointerException ex,
@@ -122,10 +102,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    /**
-     * Handles generic Exception (catch-all)
-     * Returns HTTP 500 Internal Server Error
-     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(
             Exception ex,
